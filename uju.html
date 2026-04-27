@@ -3,191 +3,469 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUPERSISTᶜᵛ | Inicio</title>
+    <title>LEÓN BOT | SUPERSISTᶜᵛ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --azul: #002d55; 
-            --naranja: #ff6600; 
-            --fondo: #f4f7fa; 
-            --blanco: #ffffff; 
-            --rojo: #d32f2f; 
+        :root {
+            --azul: #002d55; --azul2: #003d73;
+            --naranja: #ff6600; --naranja2: #ff8533;
+            --fondo: #f4f7fa; --blanco: #ffffff;
+            --rojo: #d32f2f; --gris: #888;
         }
-        
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--azul); }
+        body { font-family: 'DM Sans', sans-serif; background: var(--fondo); color: var(--azul); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
 
-        /* NAVBAR CUADRADA CON LOGO Y CIERRE */
-        nav {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            background: var(--blanco);
-            border-bottom: 4px solid var(--naranja);
-            gap: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+        nav { display:flex; flex-direction:column; align-items:center; padding:12px 15px; background:var(--blanco); border-bottom:4px solid var(--naranja); gap:10px; box-shadow:0 2px 10px rgba(0,0,0,0.07); flex-shrink:0; }
+        .header-top { width:100%; display:flex; justify-content:space-between; align-items:center; }
+        .logo-area { display:flex; align-items:center; gap:8px; }
+        .logo-texto { font-family:'Nunito',sans-serif; font-size:19px; font-weight:900; }
+        .btn-logout { background:var(--rojo); color:white; border:none; padding:8px 14px; border-radius:10px; font-size:11px; font-weight:bold; cursor:pointer; text-transform:uppercase; }
+        .nav-links { display:flex; gap:5px; flex-wrap:wrap; justify-content:center; }
+        .nav-links a { text-decoration:none; color:var(--azul); font-weight:700; font-size:12px; padding:9px 13px; border-radius:10px; transition:0.2s; }
+        .active { background:var(--naranja); color:white !important; }
 
-        .header-top { 
-            width: 100%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-        
-        .logo-area { display: flex; align-items: center; gap: 8px; }
-        .logo-texto { font-size: 20px; font-weight: 900; }
-        
-        .btn-logout {
-            background: var(--rojo);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 2px 5px rgba(211, 47, 47, 0.3);
-        }
+        .bot-header { background:linear-gradient(135deg,var(--azul),var(--azul2)); color:white; padding:13px 18px; display:flex; align-items:center; gap:13px; flex-shrink:0; }
+        .leon-avatar { width:50px; height:50px; background:var(--naranja); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:28px; flex-shrink:0; box-shadow:0 4px 15px rgba(255,102,0,0.4); animation:breathe 3s ease-in-out infinite; }
+        @keyframes breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+        .bot-info h1 { font-family:'Nunito',sans-serif; font-size:17px; font-weight:900; }
+        .bot-info p { font-size:11px; opacity:0.7; margin-top:2px; }
+        .dot { width:7px; height:7px; background:#4caf50; border-radius:50%; display:inline-block; margin-right:4px; animation:pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .acciones-header { margin-left:auto; display:flex; gap:8px; }
+        .btn-mini { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); color:white; padding:7px 11px; border-radius:9px; font-size:11px; font-weight:bold; cursor:pointer; transition:0.2s; }
+        .btn-mini:hover { background:rgba(255,255,255,0.25); }
 
-        .nav-links { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--azul);
-            font-weight: 700;
-            font-size: 12px;
-            padding: 10px 14px;
-            border-radius: 10px;
-            transition: 0.3s;
-        }
-        .active { background: var(--naranja); color: white !important; }
+        .mensajes-wrap { flex:1; overflow:hidden; display:flex; justify-content:center; }
+        #mensajes { flex:1; overflow-y:auto; padding:18px 14px; display:flex; flex-direction:column; gap:13px; max-width:580px; width:100%; }
+        #mensajes::-webkit-scrollbar { width:3px; }
+        #mensajes::-webkit-scrollbar-thumb { background:#ddd; border-radius:3px; }
 
-        /* CONTENEDOR DE PANEL */
-        .container { max-width: 500px; margin: 20px auto; padding: 0 15px; }
-        
-        .card {
-            background: var(--blanco);
-            padding: 20px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            border: 1px solid #f0f0f0;
-        }
-        
-        h2 { font-size: 16px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 15px;
-            border: 2px solid #f0f0f0;
-            border-radius: 15px;
-            outline: none;
-            font-size: 16px;
-            resize: none;
-            transition: 0.3s;
-        }
-        textarea:focus { border-color: var(--naranja); }
+        .mensaje { display:flex; align-items:flex-end; gap:9px; animation:pop 0.25s ease-out; }
+        .mensaje.user { flex-direction:row-reverse; }
+        @keyframes pop { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        .av { width:32px; height:32px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+        .av.bot { background:var(--naranja); } .av.user { background:var(--azul); }
+        .burbuja { max-width:80%; padding:12px 15px; border-radius:18px; font-size:14px; line-height:1.6; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+        .burbuja.bot { background:white; color:var(--azul); border-bottom-left-radius:4px; border:1px solid #eee; }
+        .burbuja.user { background:var(--azul); color:white; border-bottom-right-radius:4px; }
+        .hora { font-size:10px; opacity:0.4; margin-top:4px; }
 
-        .btn-ia {
-            display: block;
-            background: var(--azul);
-            color: white;
-            text-decoration: none;
-            padding: 18px;
-            border-radius: 18px;
-            margin-top: 10px;
-            font-weight: 800;
-            text-align: center;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
+        .typing { display:flex; gap:5px; padding:13px 16px; background:white; border-radius:18px; border-bottom-left-radius:4px; width:fit-content; border:1px solid #eee; }
+        .typing span { width:7px; height:7px; background:var(--naranja); border-radius:50%; animation:t 1.2s infinite; }
+        .typing span:nth-child(2){animation-delay:.2s} .typing span:nth-child(3){animation-delay:.4s}
+        @keyframes t { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-6px);opacity:1} }
+
+        .bienvenida { text-align:center; padding:25px 10px; color:var(--gris); }
+        .bienvenida .ico { font-size:56px; margin-bottom:10px; display:block; }
+        .bienvenida h3 { font-family:'Nunito',sans-serif; font-size:16px; color:var(--azul); margin-bottom:6px; }
+        .bienvenida p { font-size:13px; line-height:1.5; }
+        .sugerencias { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:14px; }
+        .sug { background:white; border:2px solid var(--naranja); color:var(--naranja); padding:7px 13px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer; transition:0.2s; }
+        .sug:hover { background:var(--naranja); color:white; }
+
+        .info-bar { display:flex; justify-content:center; gap:15px; padding:4px 15px; font-size:10px; color:#aaa; background:white; flex-shrink:0; }
+        .input-wrap { display:flex; justify-content:center; background:white; border-top:2px solid #f0f0f0; flex-shrink:0; }
+        .input-area { max-width:580px; width:100%; display:flex; gap:10px; align-items:flex-end; padding:11px 14px; }
+        #inputMsg { flex:1; border:2px solid #f0f0f0; border-radius:14px; padding:11px 14px; font-size:14px; font-family:'DM Sans',sans-serif; outline:none; resize:none; max-height:110px; line-height:1.5; transition:0.2s; }
+        #inputMsg:focus { border-color:var(--naranja); }
+        #btnEnviar { width:46px; height:46px; background:var(--naranja); border:none; border-radius:13px; color:white; font-size:19px; cursor:pointer; flex-shrink:0; transition:0.2s; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(255,102,0,0.3); }
+        #btnEnviar:hover { background:var(--naranja2); transform:scale(1.05); }
+        #btnEnviar:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+        /* PANEL ENTRENAR */
+        .panel-train { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:100; display:none; align-items:center; justify-content:center; padding:20px; }
+        .panel-train.abierto { display:flex; }
+        .train-card { background:white; border-radius:22px; padding:22px; max-width:480px; width:100%; max-height:85vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,0.2); }
+        .train-card h2 { font-family:'Nunito',sans-serif; font-size:17px; margin-bottom:4px; }
+        .train-card > p { font-size:12px; color:var(--gris); margin-bottom:14px; }
+        .train-label { font-size:12px; font-weight:700; color:var(--azul); margin-bottom:5px; display:block; }
+        .train-input, .train-textarea { width:100%; border:2px solid #f0f0f0; border-radius:12px; padding:11px 13px; font-size:13px; font-family:'DM Sans',sans-serif; outline:none; margin-bottom:12px; transition:0.2s; }
+        .train-textarea { height:90px; resize:none; }
+        .train-input:focus, .train-textarea:focus { border-color:var(--naranja); }
+        .btn-guardar-train { width:100%; background:var(--naranja); color:white; border:none; padding:14px; border-radius:14px; font-size:14px; font-weight:800; cursor:pointer; font-family:'Nunito',sans-serif; transition:0.2s; }
+        .btn-guardar-train:hover { background:var(--naranja2); }
+        .conocimientos-lista { margin-top:15px; display:flex; flex-direction:column; gap:8px; }
+        .conocimiento-item { background:#f8f9ff; border:1px solid #e8eaf6; border-radius:12px; padding:10px 13px; display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+        .conocimiento-item .preg { font-size:12px; font-weight:700; color:var(--azul); }
+        .conocimiento-item .resp { font-size:12px; color:var(--gris); margin-top:3px; }
+        .btn-del { background:none; border:none; color:#e57373; font-size:16px; cursor:pointer; flex-shrink:0; }
+        .cerrar-panel { float:right; background:none; border:none; font-size:20px; cursor:pointer; color:var(--gris); }
+
+        /* Badge aprendido */
+        .badge-aprendido { font-size:10px; color:#e65c00; margin-bottom:3px; }
+        .badge-ia { font-size:10px; color:#1565c0; margin-bottom:3px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="header-top">
-            <div class="logo-area">
-                <span style="font-size:35px">🦁</span>
-                <div class="logo-texto">SUPERSIST <span style="color:var(--naranja); font-size:12px;">CV</span></div>
+<nav>
+    <div class="header-top">
+        <div class="logo-area">
+            <span style="font-size:30px">🦁</span>
+            <div class="logo-texto">SUPERSIST <span style="color:var(--naranja);font-size:11px;">CV</span></div>
+        </div>
+        <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+    </div>
+    <div class="nav-links">
+        <a href="uju.html">INICIO</a>
+        <a href="leon_bot.html" class="active">LEÓN BOT</a>
+        <a href="#">HERRAMIENTAS</a>
+    </div>
+</nav>
+
+<div class="bot-header">
+    <div class="leon-avatar">🦁</div>
+    <div class="bot-info">
+        <h1>LEÓN BOT</h1>
+        <p><span class="dot"></span>Inteligente · Aprende lo que tú le enseñas</p>
+    </div>
+    <div class="acciones-header">
+        <button class="btn-mini" id="btnTrain">📚 Entrenar</button>
+        <button class="btn-mini" id="btnLimpiar">🗑️ Limpiar</button>
+    </div>
+</div>
+
+<div class="mensajes-wrap">
+    <div id="mensajes">
+        <div class="bienvenida" id="bienvenida">
+            <span class="ico">🦁</span>
+            <h3>¡Hola! Soy LEÓN BOT</h3>
+            <p>Tengo inteligencia propia y además aprendo<br>todo lo que tú me enseñas con 📚 Entrenar.</p>
+            <div class="sugerencias" id="sugsContainer">
+                <div class="sug" onclick="sugerir('¿Cuánto es 2 más 2?')">🔢 Matemáticas</div>
+                <div class="sug" onclick="sugerir('¿Qué puedes hacer?')">🦁 ¿Qué puedes hacer?</div>
             </div>
-            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
-        </div>
-        
-        <div class="nav-links">
-            <a href="uju.html" class="active">INICIO</a>
-            <a href="leon_bot.html">LEÓN BOT</a>
-            <a href="#">HERRAMIENTAS</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="card">
-            <h2>📝 APUNTES DE GESTIÓN D</h2>
-            <textarea id="appNotas" placeholder="Escribe tus notas aquí..."></textarea>
-            <p style="font-size:11px; color:#4caf50; text-align:right; margin-top:8px; font-weight:bold;">Sincronizado con la nube ✅</p>
-        </div>
-
-        <div class="card">
-            <h3 style="font-size: 15px; margin-bottom: 10px; text-align: center;">¿Necesitas ayuda administrativa?</h3>
-            <a href="leon_bot.html" class="btn-ia">PREGUNTAR A LEÓN BOT 🦁</a>
         </div>
     </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<div class="info-bar">
+    <span id="infoMsg">💬 0 mensajes</span>
+    <span id="infoKnow">🧠 0 conocimientos propios</span>
+    <span id="infoSync">☁️ Sincronizado</span>
+</div>
 
-        // Configuración de Firebase (Soluciona el error [DEFAULT])
-        const firebaseConfig = {
-            apiKey: "AIzaSyBV9Su1N1_ZV_LC7jRngxorp0MCDXlqdkc",
-            authDomain: "supersistcv.firebaseapp.com",
-            projectId: "supersistcv",
-            storageBucket: "supersistcv.firebasestorage.app",
-            messagingSenderId: "617639493726",
-            appId: "1:617639493726:web:dc8fcb573a4a0851d6f4cf"
-        };
+<div class="input-wrap">
+    <div class="input-area">
+        <textarea id="inputMsg" placeholder="Pregúntale cualquier cosa a León Bot..." rows="1"></textarea>
+        <button id="btnEnviar">➤</button>
+    </div>
+</div>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const area = document.getElementById('appNotas');
+<!-- PANEL ENTRENAR -->
+<div class="panel-train" id="panelTrain">
+    <div class="train-card">
+        <button class="cerrar-panel" id="btnCerrarTrain">✕</button>
+        <h2>📚 Entrenar a León Bot</h2>
+        <p>Enseña a León respuestas específicas de tu negocio. Él las priorizará sobre su conocimiento general.</p>
+        <span class="train-label">Pregunta o tema</span>
+        <input type="text" class="train-input" id="trainPregunta" placeholder="Ej: ¿Cuál es el horario de atención?">
+        <span class="train-label">Respuesta exacta que debe dar León</span>
+        <textarea class="train-textarea" id="trainRespuesta" placeholder="Ej: Atendemos de lunes a viernes de 8am a 6pm."></textarea>
+        <button class="btn-guardar-train" id="btnGuardarTrain">💾 GUARDAR CONOCIMIENTO</button>
+        <div class="conocimientos-lista" id="listaConocimientos"></div>
+    </div>
+</div>
 
-        // Cargar notas automáticamente al entrar
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const snap = await getDoc(doc(db, "notas_admin", user.uid));
-                if (snap.exists()) area.value = snap.data().texto;
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBV9Su1N1_ZV_LC7jRngxorp0MCDXlqdkc",
+        authDomain: "supersistcv.firebaseapp.com",
+        projectId: "supersistcv",
+        storageBucket: "supersistcv.firebasestorage.app",
+        messagingSenderId: "617639493726",
+        appId: "1:617639493726:web:dc8fcb573a4a0851d6f4cf"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let userId = null;
+    let historial = [];       // conversación guardada
+    let conocimientos = [];   // lo que tú le enseñaste
+    let enviando = false;
+
+    const mensajesEl = document.getElementById('mensajes');
+    const inputEl = document.getElementById('inputMsg');
+    const btnEnviar = document.getElementById('btnEnviar');
+    const bienvenida = document.getElementById('bienvenida');
+    const infoMsg = document.getElementById('infoMsg');
+    const infoKnow = document.getElementById('infoKnow');
+    const infoSync = document.getElementById('infoSync');
+    const sugsContainer = document.getElementById('sugsContainer');
+
+    // ===== AUTH =====
+    onAuthStateChanged(auth, async (user) => {
+        if (user) { userId = user.uid; await cargarTodo(); }
+        else window.location.href = "index.html";
+    });
+
+    // ===== FIREBASE =====
+    async function cargarTodo() {
+        try {
+            const snapK = await getDoc(doc(db, "leon_conocimientos", userId));
+            if (snapK.exists()) {
+                conocimientos = snapK.data().items || [];
+                renderListaConocimientos();
+                renderSugerencias();
+            }
+            const snapH = await getDoc(doc(db, "leon_historial", userId));
+            if (snapH.exists()) {
+                historial = snapH.data().mensajes || [];
+                historial.forEach(m => renderMensaje(m.texto, m.tipo, m.hora, false, m.badge || null));
+                if (historial.length > 0) bienvenida.style.display = 'none';
+                scrollAbajo();
+            }
+            actualizarInfo();
+        } catch(e) { console.log("Primera vez"); }
+    }
+
+    async function guardarHistorial() {
+        if (!userId) return;
+        await setDoc(doc(db, "leon_historial", userId), {
+            mensajes: historial.slice(-60),
+            actualizado: Date.now()
+        });
+        infoSync.textContent = '☁️ ' + new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+    }
+
+    async function guardarConocimientos() {
+        if (!userId) return;
+        await setDoc(doc(db, "leon_conocimientos", userId), {
+            items: conocimientos,
+            actualizado: Date.now()
+        });
+        infoSync.textContent = '🧠 Guardado';
+    }
+
+    // ===== MOTOR PRINCIPAL =====
+    // 1. Primero busca en lo que tú le enseñaste (prioridad máxima)
+    // 2. Si no encuentra, usa IA general
+    function buscarEnConocimientos(pregunta) {
+        if (!conocimientos.length) return null;
+        const p = pregunta.toLowerCase().trim();
+        // Exacta
+        for (const k of conocimientos) {
+            if (k.pregunta.toLowerCase().trim() === p) return k;
+        }
+        // Por palabras clave
+        const palabras = p.split(/\s+/).filter(w => w.length > 2);
+        let mejor = null, score = 0;
+        for (const k of conocimientos) {
+            const texto = (k.pregunta + ' ' + k.respuesta).toLowerCase();
+            const hits = palabras.filter(w => texto.includes(w)).length;
+            const pct = palabras.length ? hits / palabras.length : 0;
+            if (pct > score && pct >= 0.45) { score = pct; mejor = k; }
+        }
+        return mejor;
+    }
+
+    async function responderConIA(pregunta) {
+        // Armar contexto del historial reciente (últimos 8 turnos)
+        const histReciente = historial.slice(-8).map(m => ({
+            role: m.tipo === 'user' ? 'user' : 'assistant',
+            content: m.texto
+        }));
+
+        // Construir sistema con conocimientos propios como contexto
+        let sistemaExtra = '';
+        if (conocimientos.length > 0) {
+            sistemaExtra = '\n\nCONOCIMIENTO ESPECÍFICO DE ESTE NEGOCIO (prioriza esto):\n';
+            conocimientos.forEach(k => {
+                sistemaExtra += `- Pregunta: "${k.pregunta}" → Respuesta: "${k.respuesta}"\n`;
+            });
+        }
+
+        const sistema = `Eres LEÓN BOT 🦁, el asistente inteligente de SUPERSIST CV, sistema de gestión administrativa peruano de Ayacucho.
+Personalidad: amigable, directo, útil. Usas emojis con moderación.
+Respondes en español. Respuestas cortas y claras salvo que el usuario pida más detalle.
+Puedes responder cualquier pregunta: matemáticas, general, administrativa, lo que sea.${sistemaExtra}`;
+
+        const mensajesApi = [...histReciente, { role: 'user', content: pregunta }];
+
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 1000,
+                system: sistema,
+                messages: mensajesApi
+            })
+        });
+
+        const data = await res.json();
+        if (data.content && data.content[0]) return data.content[0].text;
+        throw new Error("Sin respuesta de IA");
+    }
+
+    // ===== ENVIAR =====
+    async function enviarMensaje() {
+        const texto = inputEl.value.trim();
+        if (!texto || enviando) return;
+        enviando = true; btnEnviar.disabled = true;
+        inputEl.value = ''; inputEl.style.height = 'auto';
+        bienvenida.style.display = 'none';
+
+        const hora = new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+        historial.push({ texto, tipo:'user', hora });
+        renderMensaje(texto, 'user', hora);
+
+        mostrarTyping();
+
+        let respTexto = '';
+        let badge = null;
+
+        try {
+            // Primero busca en conocimientos entrenados
+            const match = buscarEnConocimientos(texto);
+            if (match) {
+                await esperar(400);
+                respTexto = match.respuesta;
+                badge = 'aprendido';
             } else {
-                window.location.href = "index.html"; // Redirigir si no hay sesión
+                // Si no, usa IA real
+                respTexto = await responderConIA(texto);
+                badge = 'ia';
             }
-        });
+        } catch(e) {
+            respTexto = '⚠️ No pude conectarme. Revisa tu conexión e intenta de nuevo.';
+            badge = null;
+        }
 
-        // Guardado automático de notas
-        let timer;
-        area.addEventListener('input', () => {
-            clearTimeout(timer);
-            timer = setTimeout(async () => {
-                if (auth.currentUser) {
-                    await setDoc(doc(db, "notas_admin", auth.currentUser.uid), {
-                        texto: area.value,
-                        update: new Date().getTime()
-                    });
-                }
-            }, 1000);
-        });
+        ocultarTyping();
 
-        // Lógica para cerrar sesión
-        document.getElementById('btnLogout').onclick = () => {
-            if(confirm("¿Quieres salir de SUPERSIST CV?")) {
-                signOut(auth).then(() => {
-                    window.location.href = "index.html"; 
-                });
-            }
-        };
-    </script>
+        const horaR = new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+        historial.push({ texto: respTexto, tipo:'bot', hora: horaR, badge });
+        renderMensaje(respTexto, 'bot', horaR, true, badge);
+
+        await guardarHistorial();
+        actualizarInfo();
+        enviando = false; btnEnviar.disabled = false; inputEl.focus();
+    }
+
+    // ===== RENDER =====
+    function renderMensaje(texto, tipo, hora, animar=true, badge=null) {
+        const div = document.createElement('div');
+        div.className = `mensaje ${tipo}`;
+        if (!animar) div.style.animation = 'none';
+
+        const html = tipo === 'bot'
+            ? esc(texto).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')
+            : esc(texto);
+
+        let badgeHTML = '';
+        if (badge === 'aprendido') badgeHTML = `<div class="badge-aprendido">📚 Desde mi conocimiento entrenado</div>`;
+        else if (badge === 'ia') badgeHTML = `<div class="badge-ia">🧠 Respuesta inteligente</div>`;
+
+        if (tipo === 'bot') {
+            div.innerHTML = `
+                <div class="av bot">🦁</div>
+                <div>
+                    ${badgeHTML}
+                    <div class="burbuja bot">${html}</div>
+                    <div class="hora">${hora}</div>
+                </div>`;
+        } else {
+            div.innerHTML = `
+                <div>
+                    <div class="burbuja user">${html}</div>
+                    <div class="hora" style="text-align:left">${hora}</div>
+                </div>
+                <div class="av user">👤</div>`;
+        }
+        mensajesEl.appendChild(div);
+        if (animar) scrollAbajo();
+    }
+
+    function esc(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+    function mostrarTyping() {
+        const d=document.createElement('div'); d.className='mensaje bot'; d.id='typing';
+        d.innerHTML=`<div class="av bot">🦁</div><div class="typing"><span></span><span></span><span></span></div>`;
+        mensajesEl.appendChild(d); scrollAbajo();
+    }
+    function ocultarTyping() { document.getElementById('typing')?.remove(); }
+    function scrollAbajo() { setTimeout(()=>mensajesEl.scrollTop=mensajesEl.scrollHeight,50); }
+    function esperar(ms) { return new Promise(r=>setTimeout(r,ms)); }
+    function actualizarInfo() {
+        infoMsg.textContent=`💬 ${historial.length} mensajes`;
+        infoKnow.textContent=`🧠 ${conocimientos.length} conocimientos propios`;
+    }
+
+    // ===== SUGERENCIAS =====
+    function renderSugerencias() {
+        // Mantener las 2 por defecto + las del entrenamiento
+        const base = sugsContainer.querySelectorAll('.sug');
+        // Quitar las del entrenamiento previo (tienen data-train)
+        sugsContainer.querySelectorAll('[data-train]').forEach(e=>e.remove());
+        conocimientos.slice(0,3).forEach(k => {
+            const b=document.createElement('div'); b.className='sug'; b.dataset.train='1';
+            b.textContent=k.pregunta.length>28?k.pregunta.slice(0,26)+'…':k.pregunta;
+            b.onclick=()=>{ inputEl.value=k.pregunta; enviarMensaje(); };
+            sugsContainer.appendChild(b);
+        });
+    }
+
+    // ===== PANEL ENTRENAR =====
+    const panelTrain=document.getElementById('panelTrain');
+    document.getElementById('btnTrain').onclick=()=>panelTrain.classList.add('abierto');
+    document.getElementById('btnCerrarTrain').onclick=()=>panelTrain.classList.remove('abierto');
+    panelTrain.onclick=e=>{ if(e.target===panelTrain) panelTrain.classList.remove('abierto'); };
+
+    document.getElementById('btnGuardarTrain').onclick = async () => {
+        const preg=document.getElementById('trainPregunta').value.trim();
+        const resp=document.getElementById('trainRespuesta').value.trim();
+        if(!preg||!resp) return alert('Completa la pregunta y la respuesta.');
+        conocimientos.push({pregunta:preg,respuesta:resp,fecha:Date.now()});
+        document.getElementById('trainPregunta').value='';
+        document.getElementById('trainRespuesta').value='';
+        await guardarConocimientos();
+        renderListaConocimientos(); renderSugerencias(); actualizarInfo();
+    };
+
+    function renderListaConocimientos() {
+        const lista=document.getElementById('listaConocimientos');
+        lista.innerHTML = conocimientos.length ? '' : '<p style="font-size:12px;color:#aaa;text-align:center;margin-top:10px;">Sin conocimientos entrenados aún</p>';
+        [...conocimientos].reverse().forEach((k,i) => {
+            const ri=conocimientos.length-1-i;
+            const div=document.createElement('div'); div.className='conocimiento-item';
+            div.innerHTML=`<div><div class="preg">❓ ${esc(k.pregunta)}</div><div class="resp">🦁 ${esc(k.respuesta.slice(0,80))}${k.respuesta.length>80?'…':''}</div></div><button class="btn-del" data-idx="${ri}">🗑️</button>`;
+            lista.appendChild(div);
+        });
+        lista.querySelectorAll('.btn-del').forEach(btn => {
+            btn.onclick = async () => {
+                conocimientos.splice(+btn.dataset.idx,1);
+                await guardarConocimientos();
+                renderListaConocimientos(); renderSugerencias(); actualizarInfo();
+            };
+        });
+    }
+
+    // ===== LIMPIAR =====
+    document.getElementById('btnLimpiar').onclick = async () => {
+        if(!confirm('¿Borrar conversación? El conocimiento entrenado NO se borra.')) return;
+        historial=[]; mensajesEl.innerHTML='';
+        bienvenida.style.display='block'; mensajesEl.appendChild(bienvenida);
+        renderSugerencias(); await guardarHistorial(); actualizarInfo();
+    };
+
+    // ===== LOGOUT =====
+    document.getElementById('btnLogout').onclick=()=>{
+        if(confirm('¿Salir?')) signOut(auth).then(()=>window.location.href='index.html');
+    };
+
+    // ===== EVENTOS =====
+    btnEnviar.onclick=enviarMensaje;
+    inputEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensaje();} });
+    inputEl.addEventListener('input',()=>{ inputEl.style.height='auto'; inputEl.style.height=Math.min(inputEl.scrollHeight,110)+'px'; });
+
+    // Global para sugerencias del HTML
+    window.sugerir = (t) => { inputEl.value=t; enviarMensaje(); };
+</script>
 </body>
 </html>
