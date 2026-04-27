@@ -19,7 +19,6 @@
             transition: background 0.1s;
         }
         
-        /* Animación de sacudida cuando pierdes */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             20% { transform: translate(-3px, 0px) rotate(-1deg); }
@@ -56,13 +55,25 @@
             border-bottom: 2px solid #555;
         }
 
+        /* AJUSTE AUTOMÁTICO PARA PC Y MÓVIL */
         #canvas-wrap {
             border: 5px solid #000;
             margin-top: 10px;
             box-shadow: 0 0 20px rgba(255,0,0,0.2);
+            max-width: 95vw;
+            max-height: 50vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
         }
 
-        canvas { display: block; background: #e6e6fa; }
+        canvas { 
+            background: #e6e6fa; 
+            width: 100%; 
+            height: auto; 
+            image-rendering: pixelated; 
+        }
 
         .controls {
             margin-top: 15px;
@@ -71,6 +82,13 @@
             grid-template-rows: repeat(2, 75px);
             gap: 12px;
         }
+        
+        /* Ocultar controles visuales si hay teclado (PC) */
+        @media (min-width: 1024px) {
+            .controls { margin-top: 30px; }
+            .footer-hint { display: block !important; }
+        }
+
         .btn {
             background: #222;
             color: #fff;
@@ -81,12 +99,15 @@
             justify-content: center;
             font-size: 28px;
             box-shadow: 0 4px 0 #000;
+            cursor: pointer;
         }
         .btn:active { background: #ff0000; transform: translateY(4px); box-shadow: none; }
         .up { grid-column: 2; }
         .left { grid-column: 1; grid-row: 2; }
         .down { grid-column: 2; grid-row: 2; }
         .right { grid-column: 3; grid-row: 2; }
+        
+        .footer-hint { display: none; font-size: 12px; color: #666; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -109,6 +130,8 @@
     <div class="btn right" id="right">▶</div>
 </div>
 
+<div class="footer-hint">USA LAS FLECHAS O WASD EN TU TECLADO</div>
+
 <script>
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
@@ -125,7 +148,7 @@
         "DAS PENA, CAUSA. 💀",
         "NI MI ABUELA MUERE TANTO.",
         "¡PENETRADO POR UNA BOLA AZUL! 😂",
-        "¿TE RENDIMOS YA?",
+        "¿TE RINDES YA?",
         "SIGUE INTENTANDO... (NUNCA PASARÁS)",
         "¡QUÉ MALO ERES, POR DIOS!",
         "JAJAJA NO PUEDES, NO PUEDES.",
@@ -156,6 +179,23 @@
         document.getElementById('lvl-ui').innerText = lvl;
     }
 
+    // CONTROLES DE TECLADO (PC)
+    window.addEventListener('keydown', e => {
+        const k = e.key.toLowerCase();
+        if(k === 'w' || k === 'arrowup') keys['up'] = true;
+        if(k === 's' || k === 'arrowdown') keys['down'] = true;
+        if(k === 'a' || k === 'arrowleft') keys['left'] = true;
+        if(k === 'd' || k === 'arrowright') keys['right'] = true;
+    });
+    window.addEventListener('keyup', e => {
+        const k = e.key.toLowerCase();
+        if(k === 'w' || k === 'arrowup') keys['up'] = false;
+        if(k === 's' || k === 'arrowdown') keys['down'] = false;
+        if(k === 'a' || k === 'arrowleft') keys['left'] = false;
+        if(k === 'd' || k === 'arrowright') keys['right'] = false;
+    });
+
+    // CONTROLES TÁCTILES (MÓVIL)
     const setupInput = (id, key) => {
         const el = document.getElementById(id);
         const start = (e) => { e.preventDefault(); keys[key] = true; };
@@ -165,26 +205,23 @@
         el.addEventListener('mousedown', start);
         el.addEventListener('mouseup', end);
     };
-    setupInput('up', 'w'); setupInput('down', 's');
-    setupInput('left', 'a'); setupInput('right', 'd');
+    setupInput('up', 'up'); setupInput('down', 'down');
+    setupInput('left', 'left'); setupInput('right', 'right');
 
     function onDeath() {
         deaths++;
         document.getElementById('death-ui').innerText = deaths;
         trollBox.innerText = insultos[Math.floor(Math.random() * insultos.length)];
-        
-        // Efectos de burla visual
         body.classList.add('shaking');
         setTimeout(() => body.classList.remove('shaking'), 300);
-        
         loadLevel(lvl);
     }
 
     function update() {
-        if (keys['w']) player.y -= player.speed;
-        if (keys['s']) player.y += player.speed;
-        if (keys['a']) player.x -= player.speed;
-        if (keys['d']) player.x += player.speed;
+        if (keys['up']) player.y -= player.speed;
+        if (keys['down']) player.y += player.speed;
+        if (keys['left']) player.x -= player.speed;
+        if (keys['right']) player.x += player.speed;
 
         player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
         player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
