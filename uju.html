@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPERSISTᶜᵛ | Inicio</title>
+    <style>
+        :root { 
+            --azul: #002d55; 
+            --naranja: #ff6600; 
+            --fondo: #f4f7fa; 
+            --blanco: #ffffff; 
+            --rojo: #d32f2f; 
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--azul); }
+
+        /* NAVBAR CUADRADA CON LOGO Y CIERRE */
+        nav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            background: var(--blanco);
+            border-bottom: 4px solid var(--naranja);
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-top { 
+            width: 100%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .logo-area { display: flex; align-items: center; gap: 8px; }
+        .logo-texto { font-size: 20px; font-weight: 900; }
+        
+        .btn-logout {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(211, 47, 47, 0.3);
+        }
+
+        .nav-links { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--azul);
+            font-weight: 700;
+            font-size: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .active { background: var(--naranja); color: white !important; }
+
+        /* CONTENEDOR DE PANEL */
+        .container { max-width: 500px; margin: 20px auto; padding: 0 15px; }
+        
+        .card {
+            background: var(--blanco);
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: 1px solid #f0f0f0;
+        }
+        
+        h2 { font-size: 16px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            outline: none;
+            font-size: 16px;
+            resize: none;
+            transition: 0.3s;
+        }
+        textarea:focus { border-color: var(--naranja); }
+
+        .btn-ia {
+            display: block;
+            background: var(--azul);
+            color: white;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 18px;
+            margin-top: 10px;
+            font-weight: 800;
+            text-align: center;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="header-top">
+            <div class="logo-area">
+                <span style="font-size:35px">🦁</span>
+                <div class="logo-texto">SUPERSIST <span style="color:var(--naranja); font-size:12px;">CV</span></div>
+            </div>
+            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+        </div>
+        
+        <div class="nav-links">
+            <a href="uju.html" class="active">INICIO</a>
+            <a href="leon_bot.html">LEÓN BOT</a>
+            <a href="#">HERRAMIENTAS</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>📝 APUNTES DE GESTIÓN D</h2>
+            <textarea id="appNotas" placeholder="Escribe tus notas aquí..."></textarea>
+            <p style="font-size:11px; color:#4caf50; text-align:right; margin-top:8px; font-weight:bold;">Sincronizado con la nube ✅</p>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 15px; margin-bottom: 10px; text-align: center;">¿Necesitas ayuda administrativa?</h3>
+            <a href="leon_bot.html" class="btn-ia">PREGUNTAR A LEÓN BOT 🦁</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Configuración de Firebase (Soluciona el error [DEFAULT])
+        const firebaseConfig = {
+            apiKey: "AIzaSyBV9Su1N1_ZV_LC7jRngxorp0MCDXlqdkc",
+            authDomain: "supersistcv.firebaseapp.com",
+            projectId: "supersistcv",
+            storageBucket: "supersistcv.firebasestorage.app",
+            messagingSenderId: "617639493726",
+            appId: "1:617639493726:web:dc8fcb573a4a0851d6f4cf"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const area = document.getElementById('appNotas');
+
+        // Cargar notas automáticamente al entrar
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const snap = await getDoc(doc(db, "notas_admin", user.uid));
+                if (snap.exists()) area.value = snap.data().texto;
+            } else {
+                window.location.href = "index.html"; // Redirigir si no hay sesión
+            }
+        });
+
+        // Guardado automático de notas
+        let timer;
+        area.addEventListener('input', () => {
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+                if (auth.currentUser) {
+                    await setDoc(doc(db, "notas_admin", auth.currentUser.uid), {
+                        texto: area.value,
+                        update: new Date().getTime()
+                    });
+                }
+            }, 1000);
+        });
+
+        // Lógica para cerrar sesión
+        document.getElementById('btnLogout').onclick = () => {
+            if(confirm("¿Quieres salir de SUPERSIST CV?")) {
+                signOut(auth).then(() => {
+                    window.location.href = "index.html"; 
+                });
+            }
+        };
+    </script>
+</body>
+</html>
